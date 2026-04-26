@@ -1,0 +1,413 @@
+export type SocialLink = {
+  label: string;
+  href: string;
+};
+
+export type FeaturedProject = {
+  slug: string;
+  title: string;
+  description: string;
+  tags: string[];
+  links: {
+    live?: string;
+    repo?: string;
+    caseStudy?: string;
+  };
+  highlights: string[];
+  detail?: {
+    problemOrGoal: string;
+    whatIBuilt: string[];
+    technicalDecisions: string[];
+  };
+  longform?: {
+    summary: string;
+    sections: Array<{ label: string; body: string }>;
+  };
+};
+
+export type SkillItem = {
+  icon?: string;
+  label: string;
+};
+
+export type TimelineItem = {
+  title: string;
+  org: string;
+  date: string;
+  details: string[];
+};
+
+export const portfolio = {
+  person: {
+    name: "Omesh Sana",
+    role: "Full stack developer and AI/ML engineer",
+    location: "Prosper, TX (Dallas area)",
+    tagline:
+      "Computer Science student at UT Dallas building across frontend, backend, graphics/rendering, and database systems — with a bias for performance, interaction design, and technically deep delivery.",
+  },
+  contact: {
+    email: "omesh.reddy18@gmail.com",
+    calendly: "",
+  },
+  socials: [
+    { label: "GitHub", href: "https://github.com/omesh-s" },
+    { label: "LinkedIn", href: "https://linkedin.com/in/omesh-reddy-sana" },
+  ] satisfies SocialLink[],
+  about: {
+    title: "About",
+    paragraphs: [
+      "I’m a Computer Science student at the University of Texas at Dallas (B.S., Aug 2023 – Dec 2026). I like problems that reward technical depth: fast user experiences, clean backend contracts, and systems that hold up under real usage.",
+      "My work spans full-stack product builds, AI/ML integration, computer vision pipelines, and rendering/graphics concepts. I care about performance, interaction design, and building polished systems end-to-end.",
+    ],
+    bullets: [
+      "Full-stack engineering: React/Next.js + FastAPI/Flask + SQLAlchemy + REST contracts",
+      "AI/ML + CV: NLP classification, pose estimation (OpenPose/MediaPipe), time-series scoring",
+      "Systems mindset: profiling, latency reduction, caching, and validation pipelines",
+      "Graphics/rendering coursework + pipeline concepts applied in projects",
+    ],
+  },
+  skills: {
+    title: "Skills / Stack / Tools",
+    groups: [
+      {
+        label: "Frameworks & UI",
+        items: [
+          { icon: "nextjs", label: "Next.js" },
+          { icon: "react", label: "React" },
+          { icon: "typescript", label: "TypeScript" },
+          { icon: "tailwind", label: "Tailwind" },
+          { icon: "gsap", label: "GSAP" },
+          { icon: "framermotion", label: "Framer Motion" },
+        ],
+      },
+      {
+        label: "AI / ML",
+        items: [
+          { icon: "tensorflow", label: "TensorFlow" },
+          { icon: "scikitlearn", label: "scikit-learn" },
+          { icon: "opencv", label: "OpenCV" },
+          { icon: "jupyter", label: "Jupyter" },
+          { icon: "python", label: "NLP / CV Pipelines" },
+        ],
+      },
+      {
+        label: "Backend & APIs",
+        items: [
+          { icon: "fastapi", label: "FastAPI" },
+          { icon: "flask", label: "Flask" },
+          { icon: "spring", label: "Spring Boot" },
+          { icon: "nodejs", label: "Node.js" },
+        ],
+      },
+      {
+        label: "Databases",
+        items: [
+          { icon: "postgres", label: "PostgreSQL" },
+          { icon: "mysql", label: "MySQL" },
+          { icon: "sqlite", label: "SQLite" },
+        ],
+      },
+      {
+        label: "Languages",
+        items: [
+          { icon: "python", label: "Python" },
+          { icon: "typescript", label: "TypeScript" },
+          { icon: "javascript", label: "JavaScript" },
+          { icon: "java", label: "Java" },
+          { icon: "cpp", label: "C++" },
+          { icon: "c", label: "C" },
+          { icon: "csharp", label: "C#" },
+          { icon: "swift", label: "Swift" },
+          { icon: "sql", label: "SQL" },
+        ],
+      },
+      {
+        label: "Tools & Platforms",
+        items: [
+          { icon: "git", label: "Git" },
+          { icon: "github", label: "GitHub" },
+          { icon: "docker", label: "Docker" },
+          { icon: "linux", label: "Linux" },
+          { icon: "vscode", label: "VS Code" },
+          { icon: "figma", label: "Figma" },
+          { icon: "gcp", label: "GCP" },
+          { icon: "aws", label: "AWS" },
+        ],
+      },
+    ],
+  },
+  projects: {
+    title: "Featured projects",
+    items: [
+      {
+        slug: "serenity",
+        title: "Serenity — Intelligent Productivity & Wellness Assistant",
+        description:
+          "Full-stack scheduling + wellness assistant with multi-agent automation, Calendar + Notion integrations, and a real-time dashboard.",
+        tags: [
+          "React",
+          "TypeScript",
+          "FastAPI",
+          "SQLAlchemy",
+          "SQLite",
+          "Gemini API",
+          "Google Calendar API",
+          "Notion API",
+        ],
+        links: {
+          repo: "https://github.com/omesh-s/serenityflow",
+        },
+        highlights: [
+          "Built an 8+ agent automation system for research, planning, audits, and retrospectives from integrated data.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Unify scheduling, planning, and wellness into one system that turns real calendar + workspace context into actionable insights and automation.",
+          whatIBuilt: [
+            "React + TypeScript frontend with a real-time dashboard UX",
+            "FastAPI backend with documented REST contracts and structured validation",
+            "SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible)",
+            "Google Calendar + Notion integrations through a unified API layer",
+          ],
+          technicalDecisions: [
+            "Agent-style automation designed as modular workflows, not one giant prompt",
+            "Consistent request validation + error contracts to keep debugging predictable",
+            "Backend designed to evolve from SQLite → Postgres without schema pain",
+          ],
+        },
+        longform: {
+          summary:
+            "Serenity is a full-stack assistant that unifies planning, wellness, and automation. It combines structured APIs with agent-style workflows and a polished UI built for daily use.",
+          sections: [
+            {
+              label: "System",
+              body: "TypeScript/React frontend paired with a FastAPI backend and SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible).",
+            },
+            {
+              label: "Integrations",
+              body: "Integrated Google Calendar + Notion through a unified REST layer to surface planning insights, dashboards, and notifications from real user context.",
+            },
+            {
+              label: "Reliability",
+              body: "Added structured request validation and consistent error handling across endpoints to improve debuggability and production readiness.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "truthlens",
+        title: "TruthLens — AI-generated content detection extension",
+        description:
+          "Chrome extension + FastAPI backend that flags AI-generated e-commerce listings and reviews using NLP classification.",
+        tags: ["Python", "FastAPI", "NLP", "Chrome Extension APIs", "REST APIs", "Docker"],
+        links: {
+          repo: "https://github.com/AI-Mentorship/TruthLens",
+        },
+        highlights: [
+          "Reduced median API response latency by 45% through profiling, cache optimization, and validation pipeline tightening.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Detect and flag AI-generated product listings and reviews to protect consumers from deceptive e-commerce content.",
+          whatIBuilt: [
+            "FastAPI backend services with documented REST APIs and JSON contracts",
+            "NLP-based classification integration and reliable inference endpoints",
+            "Delivery leadership: weekly releases, reviews, regression testing habits",
+          ],
+          technicalDecisions: [
+            "Profiled request hot paths and improved latency via cache + validation pipeline optimizations",
+            "Stable contracts first: JSON schemas and predictable error shapes",
+            "Optimized median latency by 45% without sacrificing correctness",
+          ],
+        },
+        longform: {
+          summary:
+            "TruthLens protects consumers from deceptive AI-generated e-commerce content. I led a 6-student team and delivered production-ready backend services.",
+          sections: [
+            {
+              label: "Leadership",
+              body: "Mentored students on model integration, extension development, and agile delivery cycles with weekly release checkpoints.",
+            },
+            {
+              label: "Backend",
+              body: "Shipped FastAPI services with documented REST contracts handling 1,000+ daily requests and predictable response behavior.",
+            },
+            {
+              label: "Performance",
+              body: "Reduced latency by profiling request hot paths, tightening cache invalidation, and optimizing validation pipelines.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "stepsync",
+        title: "StepSync — AI dance performance analysis tool",
+        description:
+          "Full-stack AI tool that compares instructor/student videos using pose estimation pipelines and temporal scoring to generate feedback.",
+        tags: [
+          "Python",
+          "OpenPose",
+          "MediaPipe",
+          "TensorFlow",
+          "Computer Vision",
+          "Kalman Filtering",
+          "Flask",
+        ],
+        links: {
+          // Add repo later if/when public
+        },
+        highlights: [
+          "Achieved 92% synchronization accuracy across 300+ processed videos via smoothing + joint normalization.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Compare instructor vs student dance videos and produce accurate movement scores with actionable feedback, despite noisy pose detections.",
+          whatIBuilt: [
+            "Pose estimation pipeline using OpenPose + MediaPipe for 2D/3D keypoints/angles",
+            "Normalization + joint-tracking strategy for fair comparisons",
+            "Temporal weighted scoring combining static features + time-series similarity",
+          ],
+          technicalDecisions: [
+            "Kalman filter smoothing to stabilize keypoints under motion blur and occlusion",
+            "Normalization to align reference frames between instructor and student",
+            "Accuracy tuned for real video variance across 300+ processed pairs",
+          ],
+        },
+        longform: {
+          summary:
+            "StepSync processes paired .mp4 videos, extracts 2D/3D pose keypoints, and produces nuanced movement accuracy scores with actionable feedback.",
+          sections: [
+            {
+              label: "Pose pipeline",
+              body: "Engineered pose estimation using OpenPose + MediaPipe to extract joint keypoints/angles and normalize between instructor and student frames.",
+            },
+            {
+              label: "Stability",
+              body: "Applied Kalman filter smoothing and joint-tracking normalization to reduce noise and improve scoring reliability.",
+            },
+            {
+              label: "Scoring",
+              body: "Designed a temporal weighted scoring system combining static feature extraction and time-series comparison for nuanced spatial accuracy evaluation.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "calendrai",
+        title: "CalendrAI — AI-powered smart calendar",
+        description:
+          "TypeScript-first calendar app using NLP + OpenAI API for natural-language scheduling, conflict detection, and recurring event management.",
+        tags: ["TypeScript", "React", "OpenAI API", "NLP"],
+        links: {
+          repo: "https://github.com/omesh-s/CalendrAI",
+        },
+        highlights: [
+          "Architected an end-to-end type-safe scheduling flow with a maintainable API integration layer.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Make scheduling feel natural: convert text to events, detect conflicts, and manage recurrences without breaking type safety.",
+          whatIBuilt: [
+            "TypeScript-first React app with a clean integration layer",
+            "NLP + OpenAI API workflows for conversational scheduling",
+            "Conflict detection + recurring event management flows",
+          ],
+          technicalDecisions: [
+            "Type-safe architecture to keep features extendable and low-regression",
+            "Clear separation between UI state and AI parsing/integration logic",
+            "Structured software process (proposal → prototype → final delivery)",
+          ],
+        },
+        longform: {
+          summary:
+            "CalendrAI turns natural language into structured events and resolves conflicts as calendars get dense — built with disciplined software process and TypeScript architecture.",
+          sections: [
+            {
+              label: "NLP scheduling",
+              body: "Built a conversational scheduling interface that supports one-time and recurring events through NLP input and OpenAI-powered parsing.",
+            },
+            {
+              label: "Conflicts",
+              body: "Implemented conflict detection and resolution patterns so event creation remains reliable under overlapping schedules.",
+            },
+            {
+              label: "Architecture",
+              body: "Structured components and integrations with strong types to keep the codebase easy to extend without regressions.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "crochet-converter",
+        title: "AI-powered crochet pattern converter",
+        description:
+          "ML-backed multilingual text classification exposed via REST APIs with a responsive React frontend and reliable production deployments.",
+        tags: ["React", "TensorFlow", "REST APIs", "Caching", "GitHub Pages"],
+        links: {
+          repo: "https://github.com/omesh-s/crochet-pattern-new",
+        },
+        highlights: [
+          "Reduced end-to-end conversion latency by 60% by optimizing batching, caching, and labeling workflows.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Convert and edit crochet patterns with multilingual support, while keeping latency low enough for real-time browser use.",
+          whatIBuilt: [
+            "Multilingual text classification pipeline surfaced through REST APIs",
+            "Responsive React frontend shipped to GitHub Pages",
+            "Batching + caching improvements to reduce conversion latency",
+          ],
+          technicalDecisions: [
+            "Latency-first optimization: reduced conversion time by 60%",
+            "Caching strategy to avoid recomputation across repeated conversions",
+            "Release discipline with multiple production deployments",
+          ],
+        },
+        longform: {
+          summary:
+            "A browser-based tool for converting and editing crochet patterns with multilingual support, built with real deployment discipline and performance tuning.",
+          sections: [
+            {
+              label: "ML pipeline",
+              body: "Trained and deployed a multilingual classification pipeline and surfaced model outputs through REST APIs for real-time pattern conversion.",
+            },
+            {
+              label: "Latency",
+              body: "Optimized batching and caching to reduce conversion time while supporting 100+ translations post-launch.",
+            },
+            {
+              label: "Shipping",
+              body: "Deployed repeatedly to GitHub Pages with a stable release process and consistent UX across devices.",
+            },
+          ],
+        },
+      },
+    ] satisfies FeaturedProject[],
+  },
+  timeline: {
+    title: "Experience",
+    items: [
+      {
+        title: "Artificial Intelligence Mentor — TruthLens",
+        org: "AI Mentorship Program @ UTD AIS",
+        date: "Aug 2025 – Dec 2025",
+        details: [
+          "Led a team of 6 students building and shipping an AI-detection Chrome extension for e-commerce trust.",
+          "Architected FastAPI backend services with documented REST APIs and JSON contracts (1,000+ daily requests).",
+          "Reduced median API response latency by 45% via profiling hot paths and optimizing cache/validation pipelines.",
+        ],
+      },
+      {
+        title: "Technical Lead Consultant",
+        org: "Consult Your Community @ UT Dallas (All Ears Autism Services)",
+        date: "Jan 2025 – May 2025",
+        details: [
+          "Led a 4-person team delivering a production React website from scratch for a nonprofit client.",
+          "Implemented GitHub Actions CI/CD with Jest tests and GitHub Pages deployment.",
+          "Created documentation (architecture + maintenance guide) enabling non-technical staff to maintain the site.",
+        ],
+      },
+    ] satisfies TimelineItem[],
+  },
+} as const;
+

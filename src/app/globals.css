@@ -1,26 +1,283 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dark-by-default, cinematic palette */
+  --bg: #07080b;
+  --bg-elev-1: #0b0d12;
+  --fg: #e7e9ee;
+  --muted: #a6adbb;
+  --line: rgba(231, 233, 238, 0.10);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-strong: rgba(255, 255, 255, 0.06);
+  --glow: rgba(140, 180, 255, 0.35);
+  --shadow: rgba(0, 0, 0, 0.65);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle film grain overlay (cheap + tasteful). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Cursor aura (desktop only via pointer:fine in component) */
+.cursor-aura {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2; /* above haze, below content */
+  opacity: 0.75;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(
+      220px 220px at var(--cursor-x, -999px) var(--cursor-y, -999px),
+      rgba(185, 120, 255, 0.22),
+      rgba(185, 120, 255, 0.08) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      520px 520px at var(--cursor-x, -999px) var(--cursor-y, -999px),
+      rgba(140, 90, 255, 0.06),
+      transparent 65%
+    );
+  filter: blur(0.2px);
+}
+
+@media (max-width: 900px) {
+  .cursor-aura {
+    opacity: 0.55;
+  }
+}
+
+/* Black hole backdrop — CSS-only, no canvas */
+.blackhole {
+  /* Tuned to match reference: bright bloom + dark event horizon */
+  --bh-purple: rgba(185, 120, 255, 0.52);
+  --bh-purple-2: rgba(140, 90, 255, 0.34);
+  --bh-hot: rgba(230, 210, 255, 0.62);
+  --bh-core: rgba(0, 0, 0, 0.96);
+  will-change: transform;
+  transform-origin: 50% 50%;
+  filter: saturate(1.18) contrast(1.05);
+}
+
+.blackhole::before,
+.blackhole::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+}
+
+/* Accretion disk + swirl */
+.blackhole::before {
+  background:
+    /* event horizon */
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0.0) 0 22%, var(--bh-core) 31%, rgba(0,0,0,0) 35%),
+    /* bright ring */
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 28%, var(--bh-hot) 38%, rgba(0,0,0,0) 52%),
+    /* purple disk */
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 30%, var(--bh-purple) 46%, rgba(0,0,0,0) 72%),
+    /* swirl */
+    conic-gradient(from 210deg, rgba(0,0,0,0) 0%, var(--bh-purple-2) 18%, rgba(0,0,0,0) 45%, var(--bh-purple) 62%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 100%);
+  opacity: 0.98;
+  mask-image: radial-gradient(circle at 50% 50%, transparent 0 12%, black 22%, black 76%, transparent 100%);
+  mix-blend-mode: screen;
+}
+
+/* Soft halo (kept subtle for readability) */
+.blackhole::after {
+  inset: -22%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 34%, rgba(255,255,255,0.25) 44%, rgba(0,0,0,0) 55%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 35%, var(--bh-purple) 54%, rgba(0,0,0,0) 78%),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 45%, rgba(140, 90, 255, 0.22) 64%, rgba(0,0,0,0) 86%);
+  opacity: 0.78;
+  filter: blur(22px);
+  mix-blend-mode: screen;
+}
+
+/* Starfield / galaxy atmosphere — CSS-only and cheap */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.45) 50%, transparent 52%),
+    radial-gradient(1px 1px at 72% 28%, rgba(255,255,255,0.35) 50%, transparent 52%),
+    radial-gradient(1px 1px at 44% 62%, rgba(255,255,255,0.30) 50%, transparent 52%),
+    radial-gradient(1px 1px at 82% 76%, rgba(255,255,255,0.28) 50%, transparent 52%),
+    radial-gradient(1px 1px at 22% 78%, rgba(255,255,255,0.24) 50%, transparent 52%),
+    radial-gradient(1200px 900px at 55% 30%, rgba(150, 90, 255, 0.10), transparent 60%),
+    radial-gradient(1100px 850px at 30% 80%, rgba(90, 140, 255, 0.06), transparent 62%);
+  background-size:
+    520px 520px,
+    640px 640px,
+    760px 760px,
+    880px 880px,
+    1000px 1000px,
+    auto,
+    auto;
+  background-repeat: repeat;
+  filter: saturate(1.05);
+}
+
+@media (max-width: 640px) {
+  .blackhole {
+    opacity: 0.70;
+  }
+  .blackhole::after {
+    filter: blur(14px);
+    opacity: 0.60;
+  }
+  .starfield {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blackhole {
+    will-change: auto;
+  }
+}
+
+/* Tech constellation (hero right-side signal map) */
+@keyframes tc-drift {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+  50% {
+    transform: translate3d(0.7px, -1.2px, 0px);
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+}
+
+@keyframes tc-drift-slow {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+  50% {
+    transform: translate3d(-0.9px, 0.8px, 0px);
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+}
+
+.tc-drift {
+  animation: tc-drift 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+.tc-drift--slow {
+  animation: tc-drift-slow 10.5s ease-in-out infinite;
+}
+.tc-drift--a {
+  animation-duration: 7.8s;
+}
+.tc-drift--b {
+  animation-duration: 9.6s;
+}
+.tc-drift--c {
+  animation-duration: 8.7s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tc-drift,
+  .tc-drift--slow,
+  .tc-drift--a,
+  .tc-drift--b,
+  .tc-drift--c {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+
+/* App content layering is handled in layout.tsx */
+
+::selection {
+  background: rgba(140, 180, 255, 0.25);
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  max-width: 1120px;
+}
+
+@utility border-faint {
+  border-color: var(--line);
+}
+
+@utility card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 90px var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+@utility card-strong {
+  background: var(--card-strong);
+  border: 1px solid rgba(231, 233, 238, 0.14);
+  box-shadow: 0 34px 110px rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px);
+}
+
+@utility glow {
+  box-shadow: 0 0 0 1px rgba(140, 180, 255, 0.10), 0 0 38px rgba(140, 180, 255, 0.18);
+}
+
+@utility text-muted {
+  color: var(--muted);
+}
+
+@utility focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(140, 180, 255, 0.22);
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    border-radius: 10px;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(140, 180, 255, 0.22);
+  }
 }
