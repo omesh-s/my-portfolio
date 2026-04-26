@@ -26,6 +26,108 @@ type TechLink = {
   target: string | TechNode;
 };
 
+type SimulationBounds = {
+  minX: number;
+  maxX: number;
+  minY: number;
+  maxY: number;
+};
+
+type PointerState = {
+  active: boolean;
+  x: number;
+  y: number;
+};
+
+function createWanderForce() {
+  let nodes: TechNode[] = [];
+
+  const force = (alpha: number) => {
+    const t = performance.now() / 2100;
+    for (let i = 0; i < nodes.length; i += 1) {
+      const n = nodes[i];
+      const drift = 0.05 * (0.65 + alpha);
+      n.vx = (n.vx ?? 0) + Math.sin(t + i * 1.13) * drift;
+      n.vy = (n.vy ?? 0) + Math.cos(t + i * 1.57) * drift;
+      // Cap velocity so wander cannot fling nodes off-screen.
+      n.vx = Math.max(-0.7, Math.min(0.7, n.vx));
+      n.vy = Math.max(-0.7, Math.min(0.7, n.vy));
+    }
+  };
+
+  // D3 calls initialize with the simulation nodes. We must use these,
+  // not an external array, otherwise the force can appear to "do nothing".
+  (force as ((alpha: number) => void) & { initialize: (initNodes: TechNode[]) => void }).initialize =
+    (initNodes: TechNode[]) => {
+      nodes = initNodes;
+    };
+
+  return force;
+}
+
+function createBoundsForce(boundsRef: React.RefObject<SimulationBounds>) {
+  let nodes: TechNode[] = [];
+
+  const force = (alpha: number) => {
+    const b = boundsRef.current;
+    if (!b) return;
+
+    for (let i = 0; i < nodes.length; i += 1) {
+      const n = nodes[i];
+      const x = n.x ?? 0;
+      const y = n.y ?? 0;
+      const push = 0.16 * (0.55 + alpha);
+
+      if (x < b.minX) n.vx = (n.vx ?? 0) + (b.minX - x) * push;
+      if (x > b.maxX) n.vx = (n.vx ?? 0) - (x - b.maxX) * push;
+      if (y < b.minY) n.vy = (n.vy ?? 0) + (b.minY - y) * push;
+      if (y > b.maxY) n.vy = (n.vy ?? 0) - (y - b.maxY) * push;
+    }
+  };
+
+  (force as ((alpha: number) => void) & { initialize: (initNodes: TechNode[]) => void }).initialize =
+    (initNodes: TechNode[]) => {
+      nodes = initNodes;
+    };
+
+  return force;
+}
+
+function createCursorRepelForce(pointerRef: React.RefObject<PointerState>) {
+  let nodes: TechNode[] = [];
+
+  const force = (alpha: number) => {
+    const pointer = pointerRef.current;
+    if (!pointer?.active) return;
+
+    const radius = 280;
+    const radiusSq = radius * radius;
+    const strength = 1.35 * (0.85 + alpha);
+
+    for (let i = 0; i < nodes.length; i += 1) {
+      const n = nodes[i];
+      const dx = (n.x ?? 0) - pointer.x;
+      const dy = (n.y ?? 0) - pointer.y;
+      const dSq = dx * dx + dy * dy;
+      if (dSq > radiusSq) continue;
+
+      const dist = Math.max(0.001, Math.sqrt(dSq));
+      // Non-linear falloff makes near-cursor repulsion feel much stronger.
+      const influence = Math.pow(1 - dist / radius, 2.7);
+      const impulse = strength * influence;
+      n.vx = (n.vx ?? 0) + (dx / dist) * impulse;
+      n.vy = (n.vy ?? 0) + (dy / dist) * impulse;
+    }
+  };
+
+  (force as ((alpha: number) => void) & { initialize: (initNodes: TechNode[]) => void }).initialize =
+    (initNodes: TechNode[]) => {
+      nodes = initNodes;
+    };
+
+  return force;
+}
+
 export function TechConstellationForce({ className }: { className?: string }) {
   const reduced = usePrefersReducedMotion();
   const graphRef = useRef<ForceGraphMethods<TechNode, TechLink> | undefined>(
@@ -36,6 +138,13 @@ export function TechConstellationForce({ className }: { className?: string }) {
 
   const [size, setSize] = useState<{ w: number; h: number }>({ w: 420, h: 360 });
   const lastSizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+  const pointerRef = useRef<PointerState>({ active: false, x: 0, y: 0 });
+  const boundsRef = useRef<SimulationBounds>({
+    minX: -260,
+    maxX: 380,
+    minY: -220,
+    maxY: 220,
+  });
   const reheatTimerRef = useRef<number | null>(null);
   const fitTimerRef = useRef<number | null>(null);
 
@@ -43,8 +152,8 @@ export function TechConstellationForce({ className }: { className?: string }) {
     // Seed initial positions so the system starts "wide" instead of clumped.
     // (ForceGraph will still fully simulate; this just avoids early collision deadlocks.)
     const seed = () => ({
-      x: 40 + (Math.random() - 0.5) * 240,
-      y: (Math.random() - 0.5) * 180,
+      x: 60 + (Math.random() - 0.5) * 440,
+      y: (Math.random() - 0.5) * 300,
     });
 
     const nodes: TechNode[] = [
@@ -66,7 +175,7 @@ export function TechConstellationForce({ className }: { className?: string }) {
       // 1) Organic spacing (no rigid lattice)
       const charge = g.d3Force("charge");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (charge as any)?.strength?.(-520);
+      (charge as any)?.strength?.(-190);
 
       // 2) Very weak center gravity (slight right bias)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,9 +188,9 @@ export function TechConstellationForce({ className }: { className?: string }) {
 
       // Keep the swarm gently anchored so it doesn't drift out of frame.
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (g as any).d3Force?.("x", forceX(50).strength(0.03));
+      (g as any).d3Force?.("x", forceX(50).strength(0.02));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (g as any).d3Force?.("y", forceY(0).strength(0.03));
+      (g as any).d3Force?.("y", forceY(0).strength(0.02));
 
       // 3) Collision OFF (allow overlap)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,16 +203,13 @@ export function TechConstellationForce({ className }: { className?: string }) {
 
       // 4) Independent wander
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (g as any).d3Force?.("wander", () => {
-        const t = performance.now() / 2100;
-        data.nodes.forEach((n: any, i: number) => {
-          n.vx += Math.sin(t + i) * 0.035;
-          n.vy += Math.cos(t + i * 1.5) * 0.035;
-          // Cap velocity so wander can't fling nodes off-screen.
-          n.vx = Math.max(-0.55, Math.min(0.55, n.vx));
-          n.vy = Math.max(-0.55, Math.min(0.55, n.vy));
-        });
-      });
+      (g as any).d3Force?.("wander", createWanderForce());
+      // 5) Keep nodes inside a soft rectangular region
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (g as any).d3Force?.("bounds", createBoundsForce(boundsRef));
+      // 6) Repel nodes away from cursor when hovering the graph area
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (g as any).d3Force?.("cursorRepel", createCursorRepelForce(pointerRef));
 
       // Keep flow energetic (no React state)
       if (!reduced) {
@@ -135,7 +241,7 @@ export function TechConstellationForce({ className }: { className?: string }) {
         // ignore
       }
     },
-    [data.nodes, reduced]
+    [reduced]
   );
 
   // When the wrapper size meaningfully changes (including browser zoom),
@@ -158,6 +264,67 @@ export function TechConstellationForce({ className }: { className?: string }) {
       fitTimerRef.current = null;
     };
   }, [size.w, size.h]);
+
+  // Keep movement area responsive so constellation can spread further on larger screens.
+  useEffect(() => {
+    const halfW = Math.max(220, Math.min(420, size.w * 0.42));
+    const halfH = Math.max(170, Math.min(290, size.h * 0.36));
+    boundsRef.current = {
+      minX: 50 - halfW,
+      maxX: 50 + halfW,
+      minY: -halfH,
+      maxY: halfH,
+    };
+  }, [size.w, size.h]);
+
+  // Track pointer globally and map it into simulation coordinates for local repel behavior.
+  useEffect(() => {
+    if (reduced) return;
+
+    const onMove = (e: PointerEvent) => {
+      const el = wrapRef.current;
+      if (!el) return;
+
+      const rect = el.getBoundingClientRect();
+      const inside =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (!inside) {
+        pointerRef.current.active = false;
+        return;
+      }
+
+      const b = boundsRef.current;
+      const relX = (e.clientX - rect.left) / Math.max(1, rect.width);
+      const relY = (e.clientY - rect.top) / Math.max(1, rect.height);
+
+      pointerRef.current.active = true;
+      pointerRef.current.x = b.minX + relX * (b.maxX - b.minX);
+      pointerRef.current.y = b.minY + relY * (b.maxY - b.minY);
+
+      try {
+        graphRef.current?.d3ReheatSimulation();
+      } catch {
+        // ignore
+      }
+    };
+
+    const onLeaveWindow = () => {
+      pointerRef.current.active = false;
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener("pointerleave", onLeaveWindow);
+
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerleave", onLeaveWindow);
+      pointerRef.current.active = false;
+    };
+  }, [reduced]);
 
   // Responsive sizing to its container
   useEffect(() => {
@@ -285,8 +452,8 @@ export function TechConstellationForce({ className }: { className?: string }) {
         enablePanInteraction={false}
         enablePointerInteraction={false}
         // Keep it active unless reduced motion
-        cooldownTicks={reduced ? 0 : undefined}
-        cooldownTime={reduced ? 0 : undefined}
+        cooldownTicks={reduced ? 0 : Infinity}
+        cooldownTime={reduced ? 0 : Infinity}
         d3AlphaDecay={reduced ? 1 : 0}
         d3VelocityDecay={0.1}
         nodeRelSize={2}
