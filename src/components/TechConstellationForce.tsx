@@ -139,6 +139,9 @@ export function TechConstellationForce({ className }: { className?: string }) {
   const [size, setSize] = useState<{ w: number; h: number }>({ w: 420, h: 360 });
   const lastSizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
   const pointerRef = useRef<PointerState>({ active: false, x: 0, y: 0 });
+  const pointerInputRef = useRef<{ x: number; y: number } | null>(null);
+  const pointerRafRef = useRef<number | null>(null);
+  const lastPointerReheatRef = useRef(0);
   const boundsRef = useRef<SimulationBounds>({
     minX: -260,
     maxX: 380,
@@ -148,20 +151,38 @@ export function TechConstellationForce({ className }: { className?: string }) {
   const reheatTimerRef = useRef<number | null>(null);
   const fitTimerRef = useRef<number | null>(null);
 
+  useEffect(() => {
+    return () => {
+      if (reheatTimerRef.current != null) {
+        window.clearInterval(reheatTimerRef.current);
+        reheatTimerRef.current = null;
+      }
+      if (fitTimerRef.current != null) {
+        window.clearTimeout(fitTimerRef.current);
+        fitTimerRef.current = null;
+      }
+      if (pointerRafRef.current != null) {
+        window.cancelAnimationFrame(pointerRafRef.current);
+        pointerRafRef.current = null;
+      }
+    };
+  }, []);
+
   const data = useMemo(() => {
     // Seed initial positions so the system starts "wide" instead of clumped.
     // (ForceGraph will still fully simulate; this just avoids early collision deadlocks.)
-    const seed = () => ({
-      x: 60 + (Math.random() - 0.5) * 440,
-      y: (Math.random() - 0.5) * 300,
+    // Deterministic offsets keep lint happy and preserve the same visual spread.
+    const seed = (index: number) => ({
+      x: 60 + Math.sin(index * 2.17 + 0.8) * 220,
+      y: Math.cos(index * 2.73 + 0.5) * 150,
     });
 
     const nodes: TechNode[] = [
-      { id: "fullstack", label: "Full Stack", tier: "primary", ...seed() },
-      { id: "aiml", label: "AI/ML", tier: "primary", ...seed() },
-      { id: "databases", label: "Databases", tier: "secondary", ...seed() },
-      { id: "systems", label: "Systems", tier: "secondary", ...seed() },
-      { id: "performance", label: "Performance", tier: "secondary", ...seed() },
+      { id: "fullstack", label: "Full Stack", tier: "primary", ...seed(0) },
+      { id: "aiml", label: "AI/ML", tier: "primary", ...seed(1) },
+      { id: "databases", label: "Databases", tier: "secondary", ...seed(2) },
+      { id: "systems", label: "Systems", tier: "secondary", ...seed(3) },
+      { id: "performance", label: "Performance", tier: "secondary", ...seed(4) },
     ];
 
     // No visible connecting lines; we keep the constellation as independently floating nodes.
@@ -280,31 +301,37 @@ export function TechConstellationForce({ className }: { className?: string }) {
   // Track pointer globally and map it into simulation coordinates for local repel behavior.
   useEffect(() => {
     if (reduced) return;
+    const pointerState = pointerRef.current;
 
-    const onMove = (e: PointerEvent) => {
+    const processPointer = () => {
+      pointerRafRef.current = null;
+      const input = pointerInputRef.current;
       const el = wrapRef.current;
-      if (!el) return;
+      if (!input || !el) return;
 
       const rect = el.getBoundingClientRect();
       const inside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
+        input.x >= rect.left &&
+        input.x <= rect.right &&
+        input.y >= rect.top &&
+        input.y <= rect.bottom;
 
       if (!inside) {
-        pointerRef.current.active = false;
+        pointerState.active = false;
         return;
       }
 
       const b = boundsRef.current;
-      const relX = (e.clientX - rect.left) / Math.max(1, rect.width);
-      const relY = (e.clientY - rect.top) / Math.max(1, rect.height);
+      const relX = (input.x - rect.left) / Math.max(1, rect.width);
+      const relY = (input.y - rect.top) / Math.max(1, rect.height);
 
-      pointerRef.current.active = true;
-      pointerRef.current.x = b.minX + relX * (b.maxX - b.minX);
-      pointerRef.current.y = b.minY + relY * (b.maxY - b.minY);
+      pointerState.active = true;
+      pointerState.x = b.minX + relX * (b.maxX - b.minX);
+      pointerState.y = b.minY + relY * (b.maxY - b.minY);
 
+      const now = performance.now();
+      if (now - lastPointerReheatRef.current < 80) return;
+      lastPointerReheatRef.current = now;
       try {
         graphRef.current?.d3ReheatSimulation();
       } catch {
@@ -312,8 +339,15 @@ export function TechConstellationForce({ className }: { className?: string }) {
       }
     };
 
+    const onMove = (e: PointerEvent) => {
+      pointerInputRef.current = { x: e.clientX, y: e.clientY };
+      if (pointerRafRef.current != null) return;
+      pointerRafRef.current = window.requestAnimationFrame(processPointer);
+    };
+
     const onLeaveWindow = () => {
-      pointerRef.current.active = false;
+      pointerState.active = false;
+      pointerInputRef.current = null;
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -322,7 +356,12 @@ export function TechConstellationForce({ className }: { className?: string }) {
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeaveWindow);
-      pointerRef.current.active = false;
+      if (pointerRafRef.current != null) {
+        window.cancelAnimationFrame(pointerRafRef.current);
+        pointerRafRef.current = null;
+      }
+      pointerState.active = false;
+      pointerInputRef.current = null;
     };
   }, [reduced]);
 

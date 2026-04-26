@@ -113,6 +113,7 @@ export function SingularityBackground({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number>(0);
+  const pausedAtRef = useRef<number | null>(null);
 
   const uniforms = useMemo(
     () => ({
@@ -183,14 +184,47 @@ export function SingularityBackground({
       if (!reduced) rafRef.current = window.requestAnimationFrame(render);
     };
 
+    const startLoop = () => {
+      if (rafRef.current != null) return;
+      rafRef.current = window.requestAnimationFrame(render);
+    };
+
+    const stopLoop = () => {
+      if (rafRef.current == null) return;
+      window.cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        pausedAtRef.current = performance.now();
+        stopLoop();
+        return;
+      }
+
+      if (pausedAtRef.current != null && startRef.current) {
+        startRef.current += performance.now() - pausedAtRef.current;
+        pausedAtRef.current = null;
+      }
+
+      if (reduced) {
+        startLoop();
+        return;
+      }
+
+      startLoop();
+    };
+
     resize();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     // Start animating (or draw once in reduced motion).
-    rafRef.current = window.requestAnimationFrame(render);
+    startLoop();
 
     return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       if (rafRef.current != null) window.cancelAnimationFrame(rafRef.current);
       ro.disconnect();
       if (prog) gl.deleteProgram(prog);

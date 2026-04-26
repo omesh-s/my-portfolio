@@ -63,13 +63,13 @@ html {
   mix-blend-mode: screen;
   background:
     radial-gradient(
-      220px 220px at var(--cursor-x, -999px) var(--cursor-y, -999px),
+      96px 96px at var(--cursor-x, -999px) var(--cursor-y, -999px),
       rgba(185, 120, 255, 0.22),
       rgba(185, 120, 255, 0.08) 40%,
       transparent 70%
     ),
     radial-gradient(
-      520px 520px at var(--cursor-x, -999px) var(--cursor-y, -999px),
+      228px 228px at var(--cursor-x, -999px) var(--cursor-y, -999px),
       rgba(140, 90, 255, 0.06),
       transparent 65%
     );

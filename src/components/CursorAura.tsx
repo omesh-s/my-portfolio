@@ -6,6 +6,8 @@ import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 export function CursorAura() {
   const reduced = usePrefersReducedMotion();
   const enabled = useRef(false);
+  const rafRef = useRef<number | null>(null);
+  const pointRef = useRef<{ x: number; y: number }>({ x: -9999, y: -9999 });
 
   useEffect(() => {
     if (reduced) return;
@@ -15,21 +17,29 @@ export function CursorAura() {
 
     enabled.current = true;
 
+    const flushPointer = () => {
+      rafRef.current = null;
+      const { x, y } = pointRef.current;
+      const root = document.documentElement.style;
+      root.setProperty("--cursor-x", `${x}px`);
+      root.setProperty("--cursor-y", `${y}px`);
+    };
+
     const onMove = (e: PointerEvent) => {
-      document.documentElement.style.setProperty(
-        "--cursor-x",
-        `${e.clientX}px`
-      );
-      document.documentElement.style.setProperty(
-        "--cursor-y",
-        `${e.clientY}px`
-      );
+      pointRef.current.x = e.clientX;
+      pointRef.current.y = e.clientY;
+      if (rafRef.current != null) return;
+      rafRef.current = window.requestAnimationFrame(flushPointer);
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     return () => {
       enabled.current = false;
       window.removeEventListener("pointermove", onMove);
+      if (rafRef.current != null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [reduced]);
 
