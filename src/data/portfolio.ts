@@ -140,6 +140,132 @@ export const portfolio = {
     title: "Featured projects",
     items: [
       {
+        slug: "retail-data-quality-ai-agent",
+        title: "Retail Data Quality AI Agent",
+        description:
+          "Agentic workflows on Google ADK and Gemini with BigQuery-backed facts, explainable anomaly handling, and evaluation loops for latency and cost.",
+        tags: ["Python", "Google ADK", "Gemini", "BigQuery", "SQL"],
+        links: {},
+        highlights: [
+          "Coupled agentic reasoning with deterministic validation for high-trust retail environments.",
+          "Optimized the connective layer between frontier models and enterprise data warehouses.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Retailers lose money when store-level data anomalies go unnoticed, which makes it hard to prove ROI from data pipelines.",
+          whatIBuilt: [
+            "Architected agentic workflows using Google ADK and Gemini function-calling for explainable anomaly handling.",
+            "Integrated BigQuery facts and built evaluation loops to tune latency and cost-per-request.",
+          ],
+          technicalDecisions: [
+            "Paired LLM reasoning with deterministic checks so outputs stay auditable in regulated retail contexts.",
+            "Measured warehouse and model layers together to improve end-to-end pipeline economics, not just model quality.",
+          ],
+        },
+        longform: {
+          summary:
+            "An agentic system that surfaces and explains retail data anomalies using Gemini and ADK, grounded in BigQuery and tuned with explicit latency and cost evaluation.",
+          sections: [
+            {
+              label: "Agent design",
+              body: "Used Google ADK and Gemini tool use to automate investigation and explanation of anomalies while keeping steps inspectable for operators.",
+            },
+            {
+              label: "Data plane",
+              body: "Connected enterprise facts in BigQuery so agents reason over the same warehouse metrics the business trusts, with SQL-backed validation where needed.",
+            },
+            {
+              label: "Evaluation",
+              body: "Ran evaluation loops targeting latency and cost per request so the stack stayed practical at production traffic and spend.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "duck-pond-3d-engine",
+        title: "The Duck Pond — 3D Graphics Engine",
+        description:
+          "Custom C++20 renderer demonstrating the full graphics pipeline with Gerstner waves, Snell refraction, buoyancy, and four rendering modes up to ray-traced scenes.",
+        tags: ["C++20", "Eigen", "Numerical Methods", "Performance Optimization"],
+        links: {},
+        highlights: [
+          "High-fidelity visuals via cache-aligned linear algebra and low-level performance tuning.",
+          "Four rendering “lenses” from wireframes through complex ray-traced environments.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Build a from-scratch 3D engine that shows the complete graphics pipeline with realistic water, refraction, and lighting.",
+          whatIBuilt: [
+            "High-performance C++20 renderer with stable wave and refraction solves using Eigen.",
+            "Gerstner-wave dynamics, Snell’s Law refraction kernels, and buoyancy for 3D meshes.",
+          ],
+          technicalDecisions: [
+            "Focused on numerical stability and SIMD-friendly, cache-aligned data layouts for hot math paths.",
+            "Progressive complexity: four distinct rendering modes to validate each pipeline stage before adding costlier effects.",
+          ],
+        },
+        longform: {
+          summary:
+            "A ground-up C++20 graphics engine emphasizing physically motivated water, refraction, and mesh interaction, optimized with Eigen and careful memory layout.",
+          sections: [
+            {
+              label: "Rendering pipeline",
+              body: "Implemented the full path from geometry through shading, evolving four distinct modes from wireframe to advanced ray-traced views.",
+            },
+            {
+              label: "Simulation",
+              body: "Built Gerstner waves, Snell refraction, and buoyancy so scenes behave convincingly rather than relying on baked approximations alone.",
+            },
+            {
+              label: "Performance",
+              body: "Tuned cache-aligned algebra and low-level details so numerical solves stay stable without sacrificing frame budget.",
+            },
+          ],
+        },
+      },
+      {
+        slug: "sentence-builder",
+        title: "Sentence Builder",
+        description:
+          "JavaFX desktop app with SQLite-backed n-gram statistics and stochastic state transitions for interactive, model-style text generation from raw corpora.",
+        tags: ["Java", "JavaFX", "SQLite", "Stochastic Models"],
+        links: {},
+        highlights: [
+          "Persistent SQLite layer for n-gram transitions, aligned with how larger language models represent sequence statistics.",
+          "Bridged raw text ingestion with interactive, state-driven generation in the UI.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Parse unstructured text and simulate probabilistic language generation from learned statistics in a usable desktop tool.",
+          whatIBuilt: [
+            "JavaFX application with SQLite storage for word frequencies and transition counts.",
+            "Stochastic transition model using state matrices to drive generation from parsed corpora.",
+          ],
+          technicalDecisions: [
+            "Separated persistence (SQLite) from generation logic so corpora can grow without rewriting the Markov/n-gram core.",
+            "Chose explicit transition matrices to make the statistical behavior inspectable and debuggable.",
+          ],
+        },
+        longform: {
+          summary:
+            "A desktop generator that treats language as a stochastic process over n-grams, with SQLite as the durable store between parsing and interactive output.",
+          sections: [
+            {
+              label: "Ingestion",
+              body: "Parsed unstructured files into frequency and transition structures suitable for fast lookup during generation.",
+            },
+            {
+              label: "Model",
+              body: "Represented language transitions as stochastic processes with state matrices, echoing the statistical core of modern LM tooling at a smaller scale.",
+            },
+            {
+              label: "Product",
+              body: "Wrapped the pipeline in JavaFX so users can load text, inspect behavior, and generate new sentences interactively.",
+            },
+          ],
+        },
+      },
+      {
         slug: "serenity",
         title: "Serenity — Intelligent Productivity & Wellness Assistant",
         description:
@@ -387,6 +513,16 @@ export const portfolio = {
   timeline: {
     title: "Experience",
     items: [
+      {
+        title: "Generative AI Engineer Extern — AI Document Intelligence",
+        org: "Pfizer",
+        date: "2025 (Externship)",
+        details: [
+          "Architect production-grade multimodal extraction pipelines that turn diverse vendor documents into schema-validated JSON for enterprise consumers.",
+          "Apply Tesseract/PaddleOCR and LlamaIndex for retrieval and semantic search across complex document sets.",
+          "Engineer evaluation harnesses for p99 latency, tokens/sec, and accuracy; improved production-readiness timelines by 40%.",
+        ],
+      },
       {
         title: "Artificial Intelligence Mentor — TruthLens",
         org: "AI Mentorship Program @ UTD AIS",
