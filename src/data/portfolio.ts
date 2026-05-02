@@ -516,7 +516,7 @@ export const portfolio = {
       {
         title: "Generative AI Engineer Extern — AI Document Intelligence",
         org: "Pfizer",
-        date: "2025 (Externship)",
+        date: "Apr 2026 – Present",
         details: [
           "Architect production-grade multimodal extraction pipelines that turn diverse vendor documents into schema-validated JSON for enterprise consumers.",
           "Apply Tesseract/PaddleOCR and LlamaIndex for retrieval and semantic search across complex document sets.",
