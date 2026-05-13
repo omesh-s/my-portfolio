@@ -182,6 +182,57 @@ export const portfolio = {
         },
       },
       {
+        slug: "ai-powered-document-intelligence",
+        title: "AI-Powered Document Intelligence",
+        description:
+          "Personal project: multimodal document extraction, OCR + layout-aware parsing, and LlamaIndex-backed retrieval with rigorous latency and accuracy evaluation.",
+        tags: [
+          "Python",
+          "Multimodal extraction",
+          "Tesseract",
+          "PaddleOCR",
+          "LlamaIndex",
+          "Schema validation",
+          "Evaluation",
+        ],
+        links: {},
+        highlights: [
+          "Designed extraction pipelines that normalize messy vendor-style PDFs into schema-validated JSON.",
+          "Benchmarked p99 latency, tokens/sec, and accuracy with an evaluation harness to tighten production-style readiness.",
+        ],
+        detail: {
+          problemOrGoal:
+            "Turn heterogeneous real-world documents into reliable structured data while keeping retrieval and quality measurable.",
+          whatIBuilt: [
+            "Multimodal extraction flows from raw documents into validated JSON payloads suitable for downstream automation.",
+            "OCR stack combining Tesseract and PaddleOCR with LlamaIndex for semantic search and retrieval across large document sets.",
+            "Evaluation harnesses tracking p99 latency, throughput, and accuracy to iterate without guessing at regressions.",
+          ],
+          technicalDecisions: [
+            "Separated OCR, parsing, and retrieval so each stage could be tuned and tested independently.",
+            "Invested early in evaluation metrics that mirror production constraints rather than optimizing on toy samples alone.",
+          ],
+        },
+        longform: {
+          summary:
+            "A solo build focused on document understanding: OCR, structured extraction, retrieval with LlamaIndex, and explicit benchmarks for latency and accuracy.",
+          sections: [
+            {
+              label: "Extraction",
+              body: "Built pipelines that ingest varied document layouts and emit schema-checked JSON, reducing manual cleanup before any downstream logic runs.",
+            },
+            {
+              label: "Retrieval",
+              body: "Used LlamaIndex alongside OCR outputs so semantic search stays grounded in the parsed corpus instead of brittle keyword-only matching.",
+            },
+            {
+              label: "Evaluation",
+              body: "Tracked p99 latency, tokens per second, and accuracy in a repeatable harness to compare model and pipeline changes with confidence.",
+            },
+          ],
+        },
+      },
+      {
         slug: "duck-pond-3d-engine",
         title: "The Duck Pond — 3D Graphics Engine",
         description:
@@ -513,16 +564,6 @@ export const portfolio = {
   timeline: {
     title: "Experience",
     items: [
-      {
-        title: "Generative AI Engineer Extern — AI Document Intelligence",
-        org: "Pfizer",
-        date: "Apr 2026 – Present",
-        details: [
-          "Architect production-grade multimodal extraction pipelines that turn diverse vendor documents into schema-validated JSON for enterprise consumers.",
-          "Apply Tesseract/PaddleOCR and LlamaIndex for retrieval and semantic search across complex document sets.",
-          "Engineer evaluation harnesses for p99 latency, tokens/sec, and accuracy; improved production-readiness timelines by 40%.",
-        ],
-      },
       {
         title: "Artificial Intelligence Mentor — TruthLens",
         org: "AI Mentorship Program @ UTD AIS",
