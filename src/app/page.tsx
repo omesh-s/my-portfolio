@@ -67,18 +67,6 @@ export default function Home() {
               </div>
             </Section>
 
-            <Section id="projects" eyebrow="Selected" title={portfolio.projects.title}>
-              <Reveal variant="fadeUp">
-                <ProjectsExpandable />
-              </Reveal>
-            </Section>
-
-            <Section id="stack" eyebrow="Tools" title={portfolio.skills.title}>
-              <Reveal variant="fadeUp">
-                <SkillsGrid />
-              </Reveal>
-            </Section>
-
             <Section
               id="experience"
               eyebrow="Trajectory"
@@ -111,6 +99,18 @@ export default function Home() {
                   </Reveal>
                 ))}
               </div>
+            </Section>
+
+            <Section id="projects" eyebrow="Selected" title={portfolio.projects.title}>
+              <Reveal variant="fadeUp">
+                <ProjectsExpandable />
+              </Reveal>
+            </Section>
+
+            <Section id="stack" eyebrow="Tools" title={portfolio.skills.title}>
+              <Reveal variant="fadeUp">
+                <SkillsGrid />
+              </Reveal>
             </Section>
 
             <Section id="contact" eyebrow="Reach out" title="Contact">

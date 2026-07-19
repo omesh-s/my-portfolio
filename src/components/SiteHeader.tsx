@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 
 const nav = [
   { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Stack", href: "#stack" },
-  { label: "Experience", href: "#experience" },
   { label: "Contact", href: "#contact" },
 ];
 
