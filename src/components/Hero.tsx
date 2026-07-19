@@ -4,6 +4,7 @@ import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 import { ensureGsap } from "@/lib/gsap";
 import { useEffect, useRef } from "react";
 import { TechConstellationForce } from "@/components/TechConstellationForce";
+import { portfolio } from "@/data/portfolio";
 
 export function Hero() {
   const reduced = usePrefersReducedMotion();
@@ -62,18 +63,16 @@ export function Hero() {
               data-hero="name"
               className="text-[clamp(3.25rem,8.5vw,6.5rem)] font-semibold tracking-tight leading-[0.92]"
             >
-              Omesh Sana
+              {portfolio.person.name}
             </h1>
             <p
               data-hero="role"
               className="mt-4 text-[clamp(1.05rem,2.4vw,1.6rem)] text-muted"
             >
-              Full stack developer and AI/ML engineer
+              {portfolio.person.role}
             </p>
             <p className="mt-6 max-w-2xl text-sm sm:text-base leading-7 text-muted">
-              Computer Science student at UT Dallas. I build across frontend, backend,
-              graphics/rendering, and database systems — with a focus on performance,
-              interaction design, and technically deep, polished delivery.
+              {portfolio.person.tagline}
             </p>
           </div>
 

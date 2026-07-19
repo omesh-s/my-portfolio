@@ -41,9 +41,9 @@ export const portfolio = {
   person: {
     name: "Omesh Sana",
     role: "Full stack developer and AI/ML engineer",
-    location: "Prosper, TX (Dallas area)",
+    location: "Dallas, TX",
     tagline:
-      "Computer Science student at UT Dallas building across frontend, backend, graphics/rendering, and database systems — with a bias for performance, interaction design, and technically deep delivery.",
+      "Computer Science student at UT Dallas and ML Engineer Extern at Pfizer — building across GenAI agents, full-stack products, graphics/rendering, and database systems, with a bias for performance, reliability, and technically deep delivery.",
   },
   contact: {
     email: "omesh.reddy18@gmail.com",
@@ -51,24 +51,37 @@ export const portfolio = {
   },
   socials: [
     { label: "GitHub", href: "https://github.com/omesh-s" },
-    { label: "LinkedIn", href: "https://linkedin.com/in/omesh-reddy-sana" },
+    { label: "LinkedIn", href: "https://linkedin.com/in/omeshsana" },
   ] satisfies SocialLink[],
   about: {
     title: "About",
     paragraphs: [
-      "I’m a Computer Science student at the University of Texas at Dallas (B.S., Aug 2023 – Dec 2026). I like problems that reward technical depth: fast user experiences, clean backend contracts, and systems that hold up under real usage.",
-      "My work spans full-stack product builds, AI/ML integration, computer vision pipelines, and rendering/graphics concepts. I care about performance, interaction design, and building polished systems end-to-end.",
+      "I’m a Computer Science student at the University of Texas at Dallas (B.S., Aug 2023 – Dec 2026) and an ML Engineer Extern at Pfizer. I like problems that reward technical depth: fast user experiences, clean backend contracts, and systems that hold up under real usage.",
+      "My work spans full-stack product builds, GenAI agents and RAG pipelines, AI/ML + computer vision, and rendering/graphics concepts. I care about performance, interaction design, and building polished systems end-to-end.",
     ],
     bullets: [
       "Full-stack engineering: React/Next.js + FastAPI/Flask + SQLAlchemy + REST contracts",
+      "GenAI & agents: Vertex AI, Google ADK, RAG, MAS, MCP, LlamaIndex, Gemini",
       "AI/ML + CV: NLP classification, pose estimation (OpenPose/MediaPipe), time-series scoring",
-      "Systems mindset: profiling, latency reduction, caching, and validation pipelines",
+      "Systems mindset: profiling, latency reduction, caching, Docker, and validation pipelines",
       "Graphics/rendering coursework + pipeline concepts applied in projects",
     ],
   },
   skills: {
     title: "Skills / Stack / Tools",
     groups: [
+      {
+        label: "GenAI & Agents",
+        items: [
+          { icon: "gcp", label: "Vertex AI" },
+          { icon: "python", label: "Google ADK" },
+          { icon: "python", label: "RAG" },
+          { icon: "python", label: "MAS / MCP" },
+          { icon: "python", label: "LlamaIndex" },
+          { icon: "python", label: "Gemini" },
+          { icon: "python", label: "LLM metrics (p99, tokens/sec)" },
+        ],
+      },
       {
         label: "Frameworks & UI",
         items: [
@@ -88,6 +101,7 @@ export const portfolio = {
           { icon: "opencv", label: "OpenCV" },
           { icon: "jupyter", label: "Jupyter" },
           { icon: "python", label: "NLP / CV Pipelines" },
+          { icon: "python", label: "pytest" },
         ],
       },
       {
@@ -97,6 +111,7 @@ export const portfolio = {
           { icon: "flask", label: "Flask" },
           { icon: "spring", label: "Spring Boot" },
           { icon: "nodejs", label: "Node.js" },
+          { icon: "python", label: "Redis" },
         ],
       },
       {
@@ -105,6 +120,7 @@ export const portfolio = {
           { icon: "postgres", label: "PostgreSQL" },
           { icon: "mysql", label: "MySQL" },
           { icon: "sqlite", label: "SQLite" },
+          { icon: "gcp", label: "BigQuery" },
         ],
       },
       {
@@ -114,7 +130,7 @@ export const portfolio = {
           { icon: "typescript", label: "TypeScript" },
           { icon: "javascript", label: "JavaScript" },
           { icon: "java", label: "Java" },
-          { icon: "cpp", label: "C++" },
+          { icon: "cpp", label: "C++ / C++20" },
           { icon: "c", label: "C" },
           { icon: "csharp", label: "C#" },
           { icon: "swift", label: "Swift" },
@@ -127,11 +143,12 @@ export const portfolio = {
           { icon: "git", label: "Git" },
           { icon: "github", label: "GitHub" },
           { icon: "docker", label: "Docker" },
-          { icon: "linux", label: "Linux" },
+          { icon: "linux", label: "Linux / UNIX" },
           { icon: "vscode", label: "VS Code" },
           { icon: "figma", label: "Figma" },
           { icon: "gcp", label: "GCP" },
           { icon: "aws", label: "AWS" },
+          { icon: "github", label: "CI/CD (GitHub Actions)" },
         ],
       },
     ],
@@ -140,25 +157,70 @@ export const portfolio = {
     title: "Featured projects",
     items: [
       {
+        slug: "pymc-oss",
+        title: "Open Source Contribution: PyMC",
+        description:
+          "Contributions to the PyMC Bayesian ML library — bug reproduction, nutpie sampler fixes, and regression tests around InferenceData sample stats.",
+        tags: ["Python", "PyMC", "pytest", "debugging", "OSS"],
+        links: {
+          repo: "https://github.com/pymc-devs/pymc",
+        },
+        highlights: [
+          "Reproduced the keep_warning_stat bug in pm.sample and fixed the nutpie sampler path.",
+          "Added regression tests around InferenceData.sample_stats[\"divergence message\"].",
+        ],
+        detail: {
+          problemOrGoal:
+            "Harden open-source Bayesian sampling paths so warning/stats handling stays correct under nutpie and related samplers.",
+          whatIBuilt: [
+            "Reproduced the keep_warning_stat bug in pm.sample on the PyMC codebase.",
+            "Fixed the nutpie sampler path and added regression tests around InferenceData.sample_stats divergence messaging.",
+          ],
+          technicalDecisions: [
+            "Used reproduction-first debugging before landing a targeted fix in an active OSS Bayesian ML library.",
+            "Paired the fix with pytest coverage so the divergence-message stats path stays locked in.",
+          ],
+        },
+        longform: {
+          summary:
+            "Open-source work on PyMC focused on sampler correctness: reproducing a stats-warning bug, fixing the nutpie path, and adding regression tests.",
+          sections: [
+            {
+              label: "Reproduction",
+              body: "Isolated the keep_warning_stat failure mode in pm.sample so the fix could target the real nutpie code path instead of symptoms.",
+            },
+            {
+              label: "Fix",
+              body: "Corrected the nutpie sampler path so InferenceData sample stats preserve divergence messaging as expected.",
+            },
+            {
+              label: "Tests",
+              body: "Added regression coverage around sample_stats divergence messages to keep the behavior stable for future contributors.",
+            },
+          ],
+        },
+      },
+      {
         slug: "retail-data-quality-ai-agent",
         title: "Retail Data Quality AI Agent",
         description:
-          "Agentic workflows on Google ADK and Gemini with BigQuery-backed facts, explainable anomaly handling, and evaluation loops for latency and cost.",
-        tags: ["Python", "Google ADK", "Gemini", "BigQuery", "SQL"],
+          "Store-level ROI workflows on Google ADK and Gemini with BigQuery-backed facts, schema-hardened tools, and evaluation loops for latency and cost.",
+        tags: ["Python", "pandas", "Google ADK", "Gemini", "LiteLLM", "SQL"],
         links: {},
         highlights: [
-          "Coupled agentic reasoning with deterministic validation for high-trust retail environments.",
-          "Optimized the connective layer between frontier models and enterprise data warehouses.",
+          "Architected store-level ROI workflows with Google ADK and Gemini function-calling for auditable outputs.",
+          "Integrated BigQuery facts and eval loops to tune latency and cost-per-request across repeated runs.",
         ],
         detail: {
           problemOrGoal:
             "Retailers lose money when store-level data anomalies go unnoticed, which makes it hard to prove ROI from data pipelines.",
           whatIBuilt: [
-            "Architected agentic workflows using Google ADK and Gemini function-calling for explainable anomaly handling.",
-            "Integrated BigQuery facts and built evaluation loops to tune latency and cost-per-request.",
+            "Architected store-level ROI workflows with Google ADK and Gemini function-calling for auditable outputs.",
+            "Integrated BigQuery facts and eval loops to tune latency and cost-per-request across repeated runs.",
+            "Hardened prompt and tool schemas with validation guards for analyst review and reporting.",
           ],
           technicalDecisions: [
-            "Paired LLM reasoning with deterministic checks so outputs stay auditable in regulated retail contexts.",
+            "Paired LLM reasoning with deterministic validation so outputs stay auditable for analysts.",
             "Measured warehouse and model layers together to improve end-to-end pipeline economics, not just model quality.",
           ],
         },
@@ -168,7 +230,7 @@ export const portfolio = {
           sections: [
             {
               label: "Agent design",
-              body: "Used Google ADK and Gemini tool use to automate investigation and explanation of anomalies while keeping steps inspectable for operators.",
+              body: "Used Google ADK and Gemini function-calling to automate investigation and explanation of anomalies while keeping steps inspectable for operators.",
             },
             {
               label: "Data plane",
@@ -176,58 +238,73 @@ export const portfolio = {
             },
             {
               label: "Evaluation",
-              body: "Ran evaluation loops targeting latency and cost per request so the stack stayed practical at production traffic and spend.",
+              body: "Ran evaluation loops targeting latency and cost per request, with hardened prompt/tool schemas for analyst review.",
             },
           ],
         },
       },
       {
-        slug: "ai-powered-document-intelligence",
-        title: "AI-Powered Document Intelligence",
+        slug: "serenity",
+        title: "Serenity — Intelligent Productivity & Wellness Assistant",
         description:
-          "Personal project: multimodal document extraction, OCR + layout-aware parsing, and LlamaIndex-backed retrieval with rigorous latency and accuracy evaluation.",
+          "Full-stack scheduling + wellness assistant with an 8-agent MAS, FastAPI, MCP routing, Calendar + Notion integrations, and a real-time dashboard.",
         tags: [
+          "React",
+          "TypeScript",
           "Python",
-          "Multimodal extraction",
-          "Tesseract",
-          "PaddleOCR",
-          "LlamaIndex",
-          "Schema validation",
-          "Evaluation",
+          "FastAPI",
+          "SQLAlchemy",
+          "SQLite",
+          "Multi-Agent Systems",
+          "MCP",
+          "Gemini API",
+          "Google Calendar API",
+          "Notion API",
         ],
-        links: {},
+        links: {
+          repo: "https://github.com/omesh-s/serenityflow",
+        },
         highlights: [
-          "Designed extraction pipelines that normalize messy vendor-style PDFs into schema-validated JSON.",
-          "Benchmarked p99 latency, tokens/sec, and accuracy with an evaluation harness to tighten production-style readiness.",
+          "Productionized an 8-agent MAS with FastAPI for resilient delegation under flaky tools.",
+          "Architected webhook circuit breakers and MCP routing for traceable tool execution.",
+          "Built Calendar + Notion integrations with a real-time dashboard for planning and wellness.",
         ],
         detail: {
           problemOrGoal:
-            "Turn heterogeneous real-world documents into reliable structured data while keeping retrieval and quality measurable.",
+            "Unify scheduling, planning, and wellness into one system that turns real calendar + workspace context into actionable insights and resilient multi-agent automation.",
           whatIBuilt: [
-            "Multimodal extraction flows from raw documents into validated JSON payloads suitable for downstream automation.",
-            "OCR stack combining Tesseract and PaddleOCR with LlamaIndex for semantic search and retrieval across large document sets.",
-            "Evaluation harnesses tracking p99 latency, throughput, and accuracy to iterate without guessing at regressions.",
+            "React + TypeScript frontend with a real-time dashboard UX",
+            "FastAPI backend with documented REST contracts and structured validation",
+            "SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible)",
+            "Google Calendar + Notion integrations through a unified API layer",
+            "8-agent MAS with webhook circuit breakers, MCP routing, and failure-state observability",
           ],
           technicalDecisions: [
-            "Separated OCR, parsing, and retrieval so each stage could be tuned and tested independently.",
-            "Invested early in evaluation metrics that mirror production constraints rather than optimizing on toy samples alone.",
+            "Agent-style automation designed as modular workflows, not one giant prompt",
+            "MCP routing plus circuit breakers so tool calls stay inspectable when dependencies degrade",
+            "Consistent request validation + error contracts to keep debugging predictable",
+            "Backend designed to evolve from SQLite → Postgres without schema pain",
           ],
         },
         longform: {
           summary:
-            "A solo build focused on document understanding: OCR, structured extraction, retrieval with LlamaIndex, and explicit benchmarks for latency and accuracy.",
+            "Serenity is a full-stack assistant that unifies planning, wellness, and multi-agent automation. It combines structured APIs with MAS/MCP tooling and a polished UI built for daily use.",
           sections: [
             {
-              label: "Extraction",
-              body: "Built pipelines that ingest varied document layouts and emit schema-checked JSON, reducing manual cleanup before any downstream logic runs.",
+              label: "System",
+              body: "TypeScript/React frontend paired with a FastAPI backend and SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible).",
             },
             {
-              label: "Retrieval",
-              body: "Used LlamaIndex alongside OCR outputs so semantic search stays grounded in the parsed corpus instead of brittle keyword-only matching.",
+              label: "Multi-agent runtime",
+              body: "Productionized an 8-agent MAS with webhook circuit breakers and MCP routing so tool delegation stays resilient and traceable under flaky dependencies.",
             },
             {
-              label: "Evaluation",
-              body: "Tracked p99 latency, tokens per second, and accuracy in a repeatable harness to compare model and pipeline changes with confidence.",
+              label: "Integrations",
+              body: "Integrated Google Calendar + Notion through a unified REST layer to surface planning insights, dashboards, and notifications from real user context.",
+            },
+            {
+              label: "Reliability",
+              body: "Added structured observability, request validation, and failure-state handling across endpoints to improve debuggability and production readiness.",
             },
           ],
         },
@@ -317,61 +394,6 @@ export const portfolio = {
         },
       },
       {
-        slug: "serenity",
-        title: "Serenity — Intelligent Productivity & Wellness Assistant",
-        description:
-          "Full-stack scheduling + wellness assistant with multi-agent automation, Calendar + Notion integrations, and a real-time dashboard.",
-        tags: [
-          "React",
-          "TypeScript",
-          "FastAPI",
-          "SQLAlchemy",
-          "SQLite",
-          "Gemini API",
-          "Google Calendar API",
-          "Notion API",
-        ],
-        links: {
-          repo: "https://github.com/omesh-s/serenityflow",
-        },
-        highlights: [
-          "Built an 8+ agent automation system for research, planning, audits, and retrospectives from integrated data.",
-        ],
-        detail: {
-          problemOrGoal:
-            "Unify scheduling, planning, and wellness into one system that turns real calendar + workspace context into actionable insights and automation.",
-          whatIBuilt: [
-            "React + TypeScript frontend with a real-time dashboard UX",
-            "FastAPI backend with documented REST contracts and structured validation",
-            "SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible)",
-            "Google Calendar + Notion integrations through a unified API layer",
-          ],
-          technicalDecisions: [
-            "Agent-style automation designed as modular workflows, not one giant prompt",
-            "Consistent request validation + error contracts to keep debugging predictable",
-            "Backend designed to evolve from SQLite → Postgres without schema pain",
-          ],
-        },
-        longform: {
-          summary:
-            "Serenity is a full-stack assistant that unifies planning, wellness, and automation. It combines structured APIs with agent-style workflows and a polished UI built for daily use.",
-          sections: [
-            {
-              label: "System",
-              body: "TypeScript/React frontend paired with a FastAPI backend and SQLAlchemy persistence (SQLite, designed to be PostgreSQL-compatible).",
-            },
-            {
-              label: "Integrations",
-              body: "Integrated Google Calendar + Notion through a unified REST layer to surface planning insights, dashboards, and notifications from real user context.",
-            },
-            {
-              label: "Reliability",
-              body: "Added structured request validation and consistent error handling across endpoints to improve debuggability and production readiness.",
-            },
-          ],
-        },
-      },
-      {
         slug: "truthlens",
         title: "TruthLens — AI-generated content detection extension",
         description:
@@ -389,7 +411,7 @@ export const portfolio = {
           whatIBuilt: [
             "FastAPI backend services with documented REST APIs and JSON contracts",
             "NLP-based classification integration and reliable inference endpoints",
-            "Delivery leadership: weekly releases, reviews, regression testing habits",
+            "Delivery leadership: bi-weekly releases, reviews, regression testing habits",
           ],
           technicalDecisions: [
             "Profiled request hot paths and improved latency via cache + validation pipeline optimizations",
@@ -399,11 +421,11 @@ export const portfolio = {
         },
         longform: {
           summary:
-            "TruthLens protects consumers from deceptive AI-generated e-commerce content. I led a 6-student team and delivered production-ready backend services.",
+            "TruthLens protects consumers from deceptive AI-generated e-commerce content. I led a 6-engineer squad and delivered production-ready backend services.",
           sections: [
             {
               label: "Leadership",
-              body: "Mentored students on model integration, extension development, and agile delivery cycles with weekly release checkpoints.",
+              body: "Led a 6-engineer squad through bi-weekly release trains and regression-free staging with clear deploy checkpoints.",
             },
             {
               label: "Backend",
@@ -411,7 +433,7 @@ export const portfolio = {
             },
             {
               label: "Performance",
-              body: "Reduced latency by profiling request hot paths, tightening cache invalidation, and optimizing validation pipelines.",
+              body: "Reduced latency by profiling request hot paths, tightening Redis TTL caching, and optimizing validation pipelines.",
             },
           ],
         },
@@ -565,26 +587,44 @@ export const portfolio = {
     title: "Experience",
     items: [
       {
-        title: "Artificial Intelligence Mentor — TruthLens",
-        org: "AI Mentorship Program @ UTD AIS",
+        title: "ML Engineer Extern",
+        org: "Pfizer",
+        date: "Jun 2026 – Present",
+        details: [
+          "Designed multi-modal RAG / document-intelligence pipelines with LlamaIndex, PaddleOCR, and layout-aware parsing to turn heterogeneous documents into schema-validated JSON.",
+          "Built pytest evaluation harnesses tracking p99 latency, tokens/sec, and accuracy — improving production readiness by 40%.",
+          "Containerized components with Docker for consistent local and CI environments.",
+        ],
+      },
+      {
+        title: "ML Project Lead",
+        org: "TruthLens (Artificial Intelligence Society)",
         date: "Aug 2025 – Dec 2025",
         details: [
-          "Led a team of 6 students building and shipping an AI-detection Chrome extension for e-commerce trust.",
-          "Architected FastAPI backend services with documented REST APIs and JSON contracts (1,000+ daily requests).",
-          "Reduced median API response latency by 45% via profiling hot paths and optimizing cache/validation pipelines.",
+          "Optimized FastAPI backends, cutting median latency 45% for 1k+ daily API requests through profiling and cache tuning.",
+          "Led a 6-engineer squad through bi-weekly release trains and regression-free staging with clear deploy checkpoints.",
+          "Architected observability hooks and Redis TTL caching to preserve high-traffic reliability.",
         ],
       },
       {
         title: "Technical Lead Consultant",
-        org: "Consult Your Community @ UT Dallas (All Ears Autism Services)",
+        org: "Consult Your Community @ UT Dallas",
         date: "Jan 2025 – May 2025",
         details: [
-          "Led a 4-person team delivering a production React website from scratch for a nonprofit client.",
-          "Implemented GitHub Actions CI/CD with Jest tests and GitHub Pages deployment.",
-          "Created documentation (architecture + maintenance guide) enabling non-technical staff to maintain the site.",
+          "Architected a React/TypeScript portal, reducing regressions through modular hooks, REST contracts, and Jest tests.",
+          "Built GitHub Actions CI/CD, Jest tests, and GitHub Pages deployment for the client portal.",
+          "Translated partner requirements into a milestone-driven delivery plan with prioritized tickets and acceptance criteria.",
+        ],
+      },
+      {
+        title: "iOS Development Intern",
+        org: "Coppell ISD",
+        date: "Aug 2022 – May 2023",
+        details: [
+          "Shipped SwiftUI features with Core Data persistence, keeping offline-first classroom workflows at 99.9% uptime.",
+          "Stabilized educator onboarding flows by authoring XCTest suites and reducing regression rates across release cycles.",
         ],
       },
     ] satisfies TimelineItem[],
   },
 } as const;
-
